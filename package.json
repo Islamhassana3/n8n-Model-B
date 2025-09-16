@@ -17,7 +17,7 @@
     "build:rename": "find build -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.cjs\"' _ {} \\;",
     "build:smithery": "tsc -p tsconfig.smithery.json",
     "dev": "tsc -w",
-    "start": "node build/server.js",
+    "start": "node build/server.cjs",
     "prepare": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
