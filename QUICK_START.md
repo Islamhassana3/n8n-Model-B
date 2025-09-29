@@ -51,6 +51,8 @@ This repository now provides a **complete N8N automation stack** for Railway dep
 **MySQL Version (Legacy):**
 [![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template.json)
 
+> 🔥 **What to expect**: Railway will prompt you for database passwords and admin credentials during deployment. This ensures all 3 services (database + n8n + workflow-builder) deploy correctly and securely.
+
 **Or manually:**
 
 1. Fork this repo
@@ -60,10 +62,10 @@ This repository now provides a **complete N8N automation stack** for Railway dep
 
 ## 📋 Post-Deployment Setup
 
-After deployment, you'll have 3 URLs:
-- **N8N Web UI**: `https://n8n-[id].up.railway.app`
-- **Workflow Builder**: `https://workflow-builder-[id].up.railway.app`
-- **MySQL**: Internal only
+After deployment, you'll have 3 services running:
+- **Database**: `postgres` or `mysql` (internal only - not directly accessible)
+- **N8N Server**: `https://n8n-[id].up.railway.app` - Web UI and API
+- **Workflow Builder**: `https://workflow-builder-[id].up.railway.app` - MCP server for AI integration
 
 ### Step 1: Access N8N
 1. Go to your N8N URL
