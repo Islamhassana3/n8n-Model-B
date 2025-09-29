@@ -254,6 +254,30 @@ PORT=1937 npm start
 ```
 
 ### Railway Deployment
+
+**🔥 Deploy Complete N8N Stack to Railway**
+
+For a complete n8n automation environment, deploy the full stack including n8n server, MySQL database, and workflow builder:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/n8n-complete-stack)
+
+**What you get:**
+- ✅ **N8N Server** - Full n8n instance with web UI
+- ✅ **MySQL Database** - Persistent storage for workflows and data  
+- ✅ **Workflow Builder** - This MCP server for AI integration
+- ✅ **Auto-configuration** - Services connected and ready to use
+
+📖 **[Complete Railway Deployment Guide](./RAILWAY_DEPLOY.md)**
+
+**Quick Setup:**
+1. Click the deploy button above
+2. Set your admin credentials
+3. Generate N8N API key after deployment
+4. Use with Claude Desktop or other MCP clients
+
+**Single Service Deployment:**
+If you already have n8n running elsewhere, deploy just the workflow builder:
+
 The server automatically detects Railway environment and starts in HTTP mode:
 - Health check endpoint: `/health`
 - MCP endpoint: `/mcp` 
