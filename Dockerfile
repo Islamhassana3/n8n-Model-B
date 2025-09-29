@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --omit=dev
+# Install only production dependencies and skip prepare script
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copy built application (make sure to build locally before Docker build)
 COPY build/ ./build/

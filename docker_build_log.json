@@ -1,46 +1,20 @@
 {
-  "timestamp": "2025-09-29T03:17:56.925949Z",
+  "timestamp": "2025-09-29T03:26:19.980054+00:00",
   "image_name": "n8n-workflow-builder",
   "dockerfile": "Dockerfile",
   "build_status": "success",
+  "total_duration": 3.6000000000000005,
   "build_steps": [
     {
       "step_number": 4,
       "position": "1/7",
       "description": "FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e",
-      "output": [
-        "#5 [internal] load build context",
-        "#5 transferring context: 2.52kB done"
-      ],
+      "output": [],
       "status": "completed",
       "duration": 0.0
     },
     {
-      "step_number": 6,
-      "position": "3/7",
-      "description": "COPY package*.json ./",
-      "output": [],
-      "status": "cached",
-      "duration": 0.0
-    },
-    {
-      "step_number": 7,
-      "position": "4/7",
-      "description": "RUN npm ci --omit=dev",
-      "output": [],
-      "status": "cached",
-      "duration": 0.0
-    },
-    {
-      "step_number": 8,
-      "position": "6/7",
-      "description": "RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001",
-      "output": [],
-      "status": "cached",
-      "duration": 0.0
-    },
-    {
-      "step_number": 9,
+      "step_number": 5,
       "position": "2/7",
       "description": "WORKDIR /app",
       "output": [],
@@ -48,26 +22,68 @@
       "duration": 0.0
     },
     {
-      "step_number": 10,
+      "step_number": 7,
+      "position": "3/7",
+      "description": "COPY package*.json ./",
+      "output": [],
+      "status": "completed",
+      "duration": 0.0
+    },
+    {
+      "step_number": 8,
+      "position": "4/7",
+      "description": "RUN npm ci --omit=dev --ignore-scripts",
+      "output": [
+        "npm warn EBADENGINE Unsupported engine {",
+        "npm warn EBADENGINE   package: 'eventsource-parser@3.0.3',",
+        "npm warn EBADENGINE   required: { node: '>=20.0.0' },",
+        "npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }",
+        "npm warn EBADENGINE }",
+        "added 98 packages, and audited 99 packages in 2s",
+        "19 packages are looking for funding",
+        "  run `npm fund` for details",
+        "1 high severity vulnerability",
+        "To address all issues, run:",
+        "  npm audit fix",
+        "Run `npm audit` for details.",
+        "npm notice",
+        "npm notice New major version of npm available! 10.8.2 -> 11.6.1",
+        "npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.1",
+        "npm notice To update run: npm install -g npm@11.6.1",
+        "npm notice"
+      ],
+      "status": "completed",
+      "duration": 2.2
+    },
+    {
+      "step_number": 9,
       "position": "5/7",
       "description": "COPY build/ ./build/",
       "output": [],
-      "status": "cached",
+      "status": "completed",
       "duration": 0.0
+    },
+    {
+      "step_number": 10,
+      "position": "6/7",
+      "description": "RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001",
+      "output": [],
+      "status": "completed",
+      "duration": 0.1
     },
     {
       "step_number": 11,
       "position": "7/7",
       "description": "RUN chown -R nextjs:nodejs /app",
-      "output": [
-        "#12 exporting to image",
-        "#12 exporting layers done",
-        "#12 writing image sha256:21912abba8e81495278a0f9237ed1ae80769d9731adc04ae9e37d49a64fb0d24 done",
-        "#12 naming to docker.io/library/n8n-workflow-builder done"
-      ],
-      "status": "cached",
-      "duration": 0.0
+      "output": [],
+      "status": "completed",
+      "duration": 1.3
     }
+  ],
+  "fixes_applied": [
+    "Fixed dependency separation: Moved @types/* packages to devDependencies",
+    "Added --ignore-scripts flag to prevent prepare script execution during production install",
+    "Resolved MODULE_NOT_FOUND error for @modelcontextprotocol/sdk"
   ],
   "metadata": {
     "base_image": "node:18-alpine",
@@ -84,7 +100,30 @@
     "command": [
       "node",
       "build/main.cjs"
-    ]
+    ],
+    "npm_install": {
+      "command": "npm ci --omit=dev --ignore-scripts",
+      "packages_installed": 98,
+      "vulnerabilities": {
+        "high": 1,
+        "total": 1
+      },
+      "warnings": [
+        "EBADENGINE: eventsource-parser@3.0.3 requires node >=20.0.0, current: v18.20.8"
+      ]
+    }
   },
-  "raw_output": "#0 building with \"default\" instance using docker driver\n\n#1 [internal] load build definition from Dockerfile\n#1 transferring dockerfile: 758B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:18-alpine\n#2 DONE 0.1s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 205B done\n#3 DONE 0.0s\n\n#4 [1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 2.52kB done\n#5 DONE 0.0s\n\n#6 [3/7] COPY package*.json ./\n#6 CACHED\n\n#7 [4/7] RUN npm ci --omit=dev\n#7 CACHED\n\n#8 [6/7] RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001\n#8 CACHED\n\n#9 [2/7] WORKDIR /app\n#9 CACHED\n\n#10 [5/7] COPY build/ ./build/\n#10 CACHED\n\n#11 [7/7] RUN chown -R nextjs:nodejs /app\n#11 CACHED\n\n#12 exporting to image\n#12 exporting layers done\n#12 writing image sha256:21912abba8e81495278a0f9237ed1ae80769d9731adc04ae9e37d49a64fb0d24 done\n#12 naming to docker.io/library/n8n-workflow-builder done\n#12 DONE 0.0s\n"
+  "testing": {
+    "stdio_mode": {
+      "status": "success",
+      "output": "N8N Workflow Builder MCP server v0.10.3 running on stdio"
+    },
+    "http_mode": {
+      "status": "success",
+      "port": 1937,
+      "health_endpoint": "/health",
+      "mcp_endpoint": "/mcp"
+    }
+  },
+  "raw_output": "#0 building with \"default\" instance using docker driver\n\n#1 [internal] load build definition from Dockerfile\n#1 transferring dockerfile: 799B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:18-alpine\n#2 DONE 0.1s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 205B done\n#3 DONE 0.0s\n\n#4 [1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e\n#4 DONE 0.0s\n\n#5 [2/7] WORKDIR /app\n#5 CACHED\n\n#6 [internal] load build context\n#6 transferring context: 2.52kB done\n#6 DONE 0.0s\n\n#7 [3/7] COPY package*.json ./\n#7 DONE 0.0s\n\n#8 [4/7] RUN npm ci --omit=dev --ignore-scripts\n#8 0.826 npm warn EBADENGINE Unsupported engine {\n#8 0.826 npm warn EBADENGINE   package: 'eventsource-parser@3.0.3',\n#8 0.826 npm warn EBADENGINE   required: { node: '>=20.0.0' },\n#8 0.826 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }\n#8 0.826 npm warn EBADENGINE }\n#8 2.090 \n#8 2.090 added 98 packages, and audited 99 packages in 2s\n#8 2.090 \n#8 2.090 19 packages are looking for funding\n#8 2.090   run `npm fund` for details\n#8 2.093 \n#8 2.093 1 high severity vulnerability\n#8 2.093 \n#8 2.093 To address all issues, run:\n#8 2.093   npm audit fix\n#8 2.093 \n#8 2.093 Run `npm audit` for details.\n#8 2.095 npm notice\n#8 2.095 npm notice New major version of npm available! 10.8.2 -> 11.6.1\n#8 2.095 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.1\n#8 2.095 npm notice To update run: npm install -g npm@11.6.1\n#8 2.095 npm notice\n#8 DONE 2.2s\n\n#9 [5/7] COPY build/ ./build/\n#9 DONE 0.0s\n\n#10 [6/7] RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001\n#10 DONE 0.1s\n\n#11 [7/7] RUN chown -R nextjs:nodejs /app\n#11 DONE 1.3s\n\n#12 exporting to image\n#12 exporting layers\n#12 exporting layers 0.8s done\n#12 writing image sha256:c350c632d3a8484513e145ee4ea96ab427d6dc690583174303ac6fe88cc57243 done\n#12 naming to docker.io/library/n8n-workflow-builder done\n#12 DONE 0.8s\n"
 }

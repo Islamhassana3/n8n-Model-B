@@ -1,0 +1,66 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 799B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:18-alpine
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 205B done
+#3 DONE 0.0s
+
+#4 [1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+#4 DONE 0.0s
+
+#5 [2/7] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 2.52kB done
+#6 DONE 0.0s
+
+#7 [3/7] COPY package*.json ./
+#7 DONE 0.0s
+
+#8 [4/7] RUN npm ci --omit=dev --ignore-scripts
+#8 0.826 npm warn EBADENGINE Unsupported engine {
+#8 0.826 npm warn EBADENGINE   package: 'eventsource-parser@3.0.3',
+#8 0.826 npm warn EBADENGINE   required: { node: '>=20.0.0' },
+#8 0.826 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+#8 0.826 npm warn EBADENGINE }
+#8 2.090 
+#8 2.090 added 98 packages, and audited 99 packages in 2s
+#8 2.090 
+#8 2.090 19 packages are looking for funding
+#8 2.090   run `npm fund` for details
+#8 2.093 
+#8 2.093 1 high severity vulnerability
+#8 2.093 
+#8 2.093 To address all issues, run:
+#8 2.093   npm audit fix
+#8 2.093 
+#8 2.093 Run `npm audit` for details.
+#8 2.095 npm notice
+#8 2.095 npm notice New major version of npm available! 10.8.2 -> 11.6.1
+#8 2.095 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.1
+#8 2.095 npm notice To update run: npm install -g npm@11.6.1
+#8 2.095 npm notice
+#8 DONE 2.2s
+
+#9 [5/7] COPY build/ ./build/
+#9 DONE 0.0s
+
+#10 [6/7] RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001
+#10 DONE 0.1s
+
+#11 [7/7] RUN chown -R nextjs:nodejs /app
+#11 DONE 1.3s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.8s done
+#12 writing image sha256:c350c632d3a8484513e145ee4ea96ab427d6dc690583174303ac6fe88cc57243 done
+#12 naming to docker.io/library/n8n-workflow-builder done
+#12 DONE 0.8s
