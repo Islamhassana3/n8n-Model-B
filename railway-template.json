@@ -6,10 +6,10 @@
       "name": "mysql",
       "image": "mysql:8.0",
       "environment": {
-        "MYSQL_ROOT_PASSWORD": "n8n_root_password_${RAILWAY_ENVIRONMENT_ID}",
+        "MYSQL_ROOT_PASSWORD": "root_${RAILWAY_ENVIRONMENT_ID}",
         "MYSQL_DATABASE": "n8n",
         "MYSQL_USER": "n8n",
-        "MYSQL_PASSWORD": "n8n_password_${RAILWAY_ENVIRONMENT_ID}"
+        "MYSQL_PASSWORD": "${MYSQL_PASSWORD}"
       },
       "volumes": [
         {
@@ -30,14 +30,14 @@
       "image": "n8nio/n8n:latest",
       "environment": {
         "N8N_BASIC_AUTH_ACTIVE": "true",
-        "N8N_BASIC_AUTH_USER": "admin",
-        "N8N_BASIC_AUTH_PASSWORD": "n8n_admin_${RAILWAY_ENVIRONMENT_ID}",
+        "N8N_BASIC_AUTH_USER": "${N8N_ADMIN_USER}",
+        "N8N_BASIC_AUTH_PASSWORD": "${N8N_ADMIN_PASSWORD}",
         "DB_TYPE": "mysqldb",
         "DB_MYSQLDB_HOST": "mysql.railway.internal",
         "DB_MYSQLDB_PORT": "3306",
         "DB_MYSQLDB_DATABASE": "n8n",
         "DB_MYSQLDB_USER": "n8n",
-        "DB_MYSQLDB_PASSWORD": "n8n_password_${RAILWAY_ENVIRONMENT_ID}",
+        "DB_MYSQLDB_PASSWORD": "${MYSQL_PASSWORD}",
         "N8N_HOST": "https://n8n-${RAILWAY_ENVIRONMENT_ID}.up.railway.app",
         "N8N_PORT": "5678",
         "N8N_PROTOCOL": "https",
@@ -79,6 +79,18 @@
     }
   ],
   "variables": {
+    "N8N_ADMIN_USER": {
+      "description": "Admin username for n8n",
+      "default": "admin"
+    },
+    "N8N_ADMIN_PASSWORD": {
+      "description": "Admin password for n8n (minimum 8 characters)",
+      "required": true
+    },
+    "MYSQL_PASSWORD": {
+      "description": "MySQL password for n8n user",
+      "required": true
+    },
     "N8N_API_KEY": {
       "description": "API key for n8n (generate this in n8n UI after deployment)",
       "required": false

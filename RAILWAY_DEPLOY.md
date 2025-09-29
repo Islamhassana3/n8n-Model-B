@@ -35,10 +35,10 @@ The complete stack includes three services that work together. You can choose be
 ### Option 1: One-Click Deploy (Recommended)
 
 **PostgreSQL Version (Recommended):**
-[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/template/n8n-postgres-stack)
+[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template-postgres.json)
 
 **MySQL Version (Legacy):**
-[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/template/n8n-mysql-stack)
+[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template.json)
 
 ### Option 2: Manual Setup
 
