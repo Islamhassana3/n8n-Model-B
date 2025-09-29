@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-09-29T03:17:56.925949Z",
+  "image_name": "n8n-workflow-builder",
+  "dockerfile": "Dockerfile",
+  "build_status": "success",
+  "build_steps": [
+    {
+      "step_number": 4,
+      "position": "1/7",
+      "description": "FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e",
+      "output": [
+        "#5 [internal] load build context",
+        "#5 transferring context: 2.52kB done"
+      ],
+      "status": "completed",
+      "duration": 0.0
+    },
+    {
+      "step_number": 6,
+      "position": "3/7",
+      "description": "COPY package*.json ./",
+      "output": [],
+      "status": "cached",
+      "duration": 0.0
+    },
+    {
+      "step_number": 7,
+      "position": "4/7",
+      "description": "RUN npm ci --omit=dev",
+      "output": [],
+      "status": "cached",
+      "duration": 0.0
+    },
+    {
+      "step_number": 8,
+      "position": "6/7",
+      "description": "RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001",
+      "output": [],
+      "status": "cached",
+      "duration": 0.0
+    },
+    {
+      "step_number": 9,
+      "position": "2/7",
+      "description": "WORKDIR /app",
+      "output": [],
+      "status": "cached",
+      "duration": 0.0
+    },
+    {
+      "step_number": 10,
+      "position": "5/7",
+      "description": "COPY build/ ./build/",
+      "output": [],
+      "status": "cached",
+      "duration": 0.0
+    },
+    {
+      "step_number": 11,
+      "position": "7/7",
+      "description": "RUN chown -R nextjs:nodejs /app",
+      "output": [
+        "#12 exporting to image",
+        "#12 exporting layers done",
+        "#12 writing image sha256:21912abba8e81495278a0f9237ed1ae80769d9731adc04ae9e37d49a64fb0d24 done",
+        "#12 naming to docker.io/library/n8n-workflow-builder done"
+      ],
+      "status": "cached",
+      "duration": 0.0
+    }
+  ],
+  "metadata": {
+    "base_image": "node:18-alpine",
+    "working_directory": "/app",
+    "user": "nextjs:nodejs",
+    "exposed_port": 1937,
+    "health_check": {
+      "interval": "30s",
+      "timeout": "10s",
+      "start_period": "40s",
+      "retries": 3,
+      "command": "wget --no-verbose --tries=1 --spider http://localhost:1937/health || exit 1"
+    },
+    "command": [
+      "node",
+      "build/main.cjs"
+    ]
+  },
+  "raw_output": "#0 building with \"default\" instance using docker driver\n\n#1 [internal] load build definition from Dockerfile\n#1 transferring dockerfile: 758B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:18-alpine\n#2 DONE 0.1s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 205B done\n#3 DONE 0.0s\n\n#4 [1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 2.52kB done\n#5 DONE 0.0s\n\n#6 [3/7] COPY package*.json ./\n#6 CACHED\n\n#7 [4/7] RUN npm ci --omit=dev\n#7 CACHED\n\n#8 [6/7] RUN addgroup -g 1001 -S nodejs &&     adduser -S nextjs -u 1001\n#8 CACHED\n\n#9 [2/7] WORKDIR /app\n#9 CACHED\n\n#10 [5/7] COPY build/ ./build/\n#10 CACHED\n\n#11 [7/7] RUN chown -R nextjs:nodejs /app\n#11 CACHED\n\n#12 exporting to image\n#12 exporting layers done\n#12 writing image sha256:21912abba8e81495278a0f9237ed1ae80769d9731adc04ae9e37d49a64fb0d24 done\n#12 naming to docker.io/library/n8n-workflow-builder done\n#12 DONE 0.0s\n"
+}
