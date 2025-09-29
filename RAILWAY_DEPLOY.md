@@ -4,8 +4,21 @@ This guide explains how to deploy a complete N8N automation stack on Railway, in
 
 ## 🏗️ Architecture
 
-The complete stack includes three services that work together:
+The complete stack includes three services that work together. You can choose between PostgreSQL (recommended) or MySQL:
 
+**Option 1: PostgreSQL Stack (Recommended)**
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ PostgreSQL DB   │◄───┤   N8N Server    │◄───┤ Workflow Builder│
+│   Port: 5432    │    │   Port: 5678    │    │   Port: 1937    │
+│                 │    │                 │    │                 │
+│ • Stores workflows  │ • Web UI         │    │ • MCP Server    │
+│ • User data     │    │ • API endpoints │    │ • Tool access   │
+│ • Executions    │    │ • Automations   │    │ • HTTP/stdio    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+**Option 2: MySQL Stack (Legacy)**
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   MySQL DB      │◄───┤   N8N Server    │◄───┤ Workflow Builder│
@@ -21,9 +34,58 @@ The complete stack includes three services that work together:
 
 ### Option 1: One-Click Deploy (Recommended)
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/n8n-complete-stack)
+**PostgreSQL Version (Recommended):**
+[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/template/n8n-postgres-stack)
+
+**MySQL Version (Legacy):**
+[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/template/n8n-mysql-stack)
 
 ### Option 2: Manual Setup
+
+Choose your preferred database:
+
+#### PostgreSQL Setup (Recommended)
+
+1. **Fork this repository** to your GitHub account
+
+2. **Create a new Railway project**:
+   - Go to [Railway.app](https://railway.app)
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your forked repository
+
+3. **Deploy the services in order**:
+
+   **Step 1: Deploy PostgreSQL Database**
+   ```bash
+   # Add PostgreSQL service
+   railway add postgres
+   
+   # Set environment variables
+   railway variables set POSTGRES_DB=n8n
+   railway variables set POSTGRES_USER=n8n  
+   railway variables set POSTGRES_PASSWORD=your_secure_n8n_password
+   ```
+
+   **Step 2: Deploy N8N Server**
+   ```bash
+   # Add n8n service
+   railway add n8n
+   
+   # Set environment variables for n8n
+   railway variables set N8N_BASIC_AUTH_ACTIVE=true
+   railway variables set N8N_BASIC_AUTH_USER=admin
+   railway variables set N8N_BASIC_AUTH_PASSWORD=your_admin_password
+   railway variables set DB_TYPE=postgresdb
+   railway variables set DB_POSTGRESDB_HOST=${{postgres.RAILWAY_PRIVATE_DOMAIN}}
+   railway variables set DB_POSTGRESDB_PORT=5432
+   railway variables set DB_POSTGRESDB_DATABASE=n8n
+   railway variables set DB_POSTGRESDB_USER=n8n
+   railway variables set DB_POSTGRESDB_PASSWORD=your_secure_n8n_password
+   railway variables set N8N_HOST=${{RAILWAY_PUBLIC_DOMAIN}}
+   railway variables set WEBHOOK_URL=${{RAILWAY_PUBLIC_DOMAIN}}
+   ```
+
+#### MySQL Setup (Legacy)
 
 1. **Fork this repository** to your GitHub account
 
@@ -75,7 +137,27 @@ The complete stack includes three services that work together:
 
 ## 🔧 Environment Variables
 
-### MySQL Service
+### PostgreSQL Service (Recommended)
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `POSTGRES_DB` | Database name | `n8n` |
+| `POSTGRES_USER` | N8N user | `n8n` |
+| `POSTGRES_PASSWORD` | N8N user password | `secure_n8n_pass_123` |
+
+### N8N Server Service (PostgreSQL)
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `N8N_BASIC_AUTH_ACTIVE` | Enable basic auth | `true` |
+| `N8N_BASIC_AUTH_USER` | Admin username | `admin` |
+| `N8N_BASIC_AUTH_PASSWORD` | Admin password | `admin_pass_123` |
+| `DB_TYPE` | Database type | `postgresdb` |
+| `DB_POSTGRESDB_HOST` | PostgreSQL host | `${{postgres.RAILWAY_PRIVATE_DOMAIN}}` |
+| `DB_POSTGRESDB_PORT` | PostgreSQL port | `5432` |
+| `DB_POSTGRESDB_DATABASE` | Database name | `n8n` |
+| `DB_POSTGRESDB_USER` | Database user | `n8n` |
+| `DB_POSTGRESDB_PASSWORD` | Database password | `secure_n8n_pass_123` |
+
+### MySQL Service (Legacy)
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `MYSQL_ROOT_PASSWORD` | Root password | `secure_root_pass_123` |
@@ -83,7 +165,7 @@ The complete stack includes three services that work together:
 | `MYSQL_USER` | N8N user | `n8n` |
 | `MYSQL_PASSWORD` | N8N user password | `secure_n8n_pass_123` |
 
-### N8N Server Service
+### N8N Server Service (MySQL)
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `N8N_BASIC_AUTH_ACTIVE` | Enable basic auth | `true` |
@@ -155,7 +237,7 @@ After deployment, you'll have three services:
 
 - **N8N Web UI**: `https://n8n-[project-id].up.railway.app`
 - **Workflow Builder API**: `https://workflow-builder-[project-id].up.railway.app`
-- **MySQL**: Internal only (`mysql.railway.internal:3306`)
+- **Database**: Internal only (`postgres.railway.internal:5432` or `mysql.railway.internal:3306`)
 
 ## 🛠️ Usage Examples
 
@@ -202,14 +284,21 @@ curl -X POST https://your-workflow-builder.railway.app/mcp \
 1. **"Connection refused" errors**:
    - Check that services are running in Railway dashboard
    - Verify environment variables are set correctly
-   - Check service dependencies (MySQL → N8N → Workflow Builder)
+   - Check service dependencies (Database → N8N → Workflow Builder)
 
 2. **N8N can't connect to database**:
-   - Verify MySQL service is healthy
-   - Check database environment variables match
-   - Ensure MySQL user has proper permissions
+   - Verify database service (PostgreSQL/MySQL) is healthy
+   - Check database environment variables match between services
+   - Ensure database user has proper permissions
+   - For PostgreSQL: Verify `DB_TYPE=postgresdb` and `DB_POSTGRESDB_*` variables
+   - For MySQL: Verify `DB_TYPE=mysqldb` and `DB_MYSQLDB_*` variables
 
-3. **Workflow Builder can't connect to N8N**:
+3. **Database connection timeout**:
+   - PostgreSQL: Check `DB_POSTGRESDB_HOST=${{postgres.RAILWAY_PRIVATE_DOMAIN}}`
+   - MySQL: Check `DB_MYSQLDB_HOST=${{mysql.RAILWAY_PRIVATE_DOMAIN}}`
+   - Ensure database service is fully started before n8n starts
+
+4. **Workflow Builder can't connect to N8N**:
    - Verify N8N service is running and accessible
    - Check N8N_HOST environment variable
    - Verify API key is valid

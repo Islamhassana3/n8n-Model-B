@@ -8,5 +8,7 @@ healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
+# This defines the workflow-builder service only
+# For complete n8n stack deployment, use railway-template-postgres.toml or railway-template.toml
 [services.n8n-workflow-builder]
 source = "."
