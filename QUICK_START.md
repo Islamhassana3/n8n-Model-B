@@ -46,10 +46,10 @@ This repository now provides a **complete N8N automation stack** for Railway dep
 ## 🚀 One-Click Deploy
 
 **PostgreSQL Version (Recommended):**
-[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Islamhassana3/n8n-workflow-builder/blob/main/railway-template-postgres.toml)
+[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template-postgres.json)
 
 **MySQL Version (Legacy):**
-[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Islamhassana3/n8n-workflow-builder/blob/main/railway-template.toml)
+[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template.json)
 
 **Or manually:**
 

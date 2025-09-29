@@ -30,8 +30,8 @@ Stores data                   Uses DB          Calls N8N API
 ### Issue: Only N8N Service Deployed
 **Problem**: Railway deploys only the workflow-builder service, missing database and n8n
 **Solution**: Use the complete template files:
-- For PostgreSQL: `railway-template-postgres.toml`
-- For MySQL: `railway-template.toml`
+- For PostgreSQL: `railway-template-postgres.json`
+- For MySQL: `railway-template.json`
 
 ### Issue: Services Not Connected
 **Problem**: Services deploy but can't communicate

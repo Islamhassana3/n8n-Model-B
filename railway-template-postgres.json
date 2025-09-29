@@ -8,7 +8,7 @@
       "environment": {
         "POSTGRES_DB": "n8n",
         "POSTGRES_USER": "n8n",
-        "POSTGRES_PASSWORD": "n8n_password_${RAILWAY_ENVIRONMENT_ID}"
+        "POSTGRES_PASSWORD": "${POSTGRES_PASSWORD}"
       },
       "volumes": [
         {
@@ -29,14 +29,14 @@
       "image": "n8nio/n8n:latest",
       "environment": {
         "N8N_BASIC_AUTH_ACTIVE": "true",
-        "N8N_BASIC_AUTH_USER": "admin",
-        "N8N_BASIC_AUTH_PASSWORD": "n8n_admin_${RAILWAY_ENVIRONMENT_ID}",
+        "N8N_BASIC_AUTH_USER": "${N8N_ADMIN_USER}",
+        "N8N_BASIC_AUTH_PASSWORD": "${N8N_ADMIN_PASSWORD}",
         "DB_TYPE": "postgresdb",
         "DB_POSTGRESDB_HOST": "postgres.railway.internal",
         "DB_POSTGRESDB_PORT": "5432",
         "DB_POSTGRESDB_DATABASE": "n8n",
         "DB_POSTGRESDB_USER": "n8n",
-        "DB_POSTGRESDB_PASSWORD": "n8n_password_${RAILWAY_ENVIRONMENT_ID}",
+        "DB_POSTGRESDB_PASSWORD": "${POSTGRES_PASSWORD}",
         "N8N_HOST": "https://n8n-${RAILWAY_ENVIRONMENT_ID}.up.railway.app",
         "N8N_PORT": "5678",
         "N8N_PROTOCOL": "https",
@@ -78,6 +78,18 @@
     }
   ],
   "variables": {
+    "N8N_ADMIN_USER": {
+      "description": "Admin username for n8n",
+      "default": "admin"
+    },
+    "N8N_ADMIN_PASSWORD": {
+      "description": "Admin password for n8n (minimum 8 characters)",
+      "required": true
+    },
+    "POSTGRES_PASSWORD": {
+      "description": "PostgreSQL password for n8n user",
+      "required": true
+    },
     "N8N_API_KEY": {
       "description": "API key for n8n (generate this in n8n UI after deployment)",
       "required": false

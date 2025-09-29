@@ -257,9 +257,13 @@ PORT=1937 npm start
 
 **🔥 Deploy Complete N8N Stack to Railway**
 
-For a complete n8n automation environment, deploy the full stack including n8n server, MySQL database, and workflow builder:
+For a complete n8n automation environment, deploy the full stack including n8n server, database, and workflow builder:
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/n8n-complete-stack)
+**PostgreSQL Version (Recommended):**
+[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template-postgres.json)
+
+**MySQL Version (Legacy):**
+[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://raw.githubusercontent.com/Islamhassana3/n8n-workflow-builder/main/railway-template.json)
 
 **What you get:**
 - ✅ **N8N Server** - Full n8n instance with web UI
