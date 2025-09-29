@@ -13,9 +13,9 @@ const buildDir = path.join(__dirname, '..', 'build');
 
 // Mapping of problematic imports to correct paths
 const importFixes = {
-  '@modelcontextprotocol/sdk/server/mcp.js': '@modelcontextprotocol/sdk/dist/cjs/server/mcp.js',
-  '@modelcontextprotocol/sdk/server/stdio.js': '@modelcontextprotocol/sdk/dist/cjs/server/stdio.js',
-  '@modelcontextprotocol/sdk/server/streamableHttp.js': '@modelcontextprotocol/sdk/dist/cjs/server/streamableHttp.js'
+  '@modelcontextprotocol/sdk/server/mcp.js': '../node_modules/@modelcontextprotocol/sdk/dist/cjs/server/mcp.js',
+  '@modelcontextprotocol/sdk/server/stdio.js': '../node_modules/@modelcontextprotocol/sdk/dist/cjs/server/stdio.js',
+  '@modelcontextprotocol/sdk/server/streamableHttp.js': '../node_modules/@modelcontextprotocol/sdk/dist/cjs/server/streamableHttp.js'
 };
 
 function fixImportsInFile(filePath) {
