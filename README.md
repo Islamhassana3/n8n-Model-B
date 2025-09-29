@@ -75,6 +75,7 @@ A powerful Model Context Protocol (MCP) server that enables AI assistants to man
 - [Installation & Usage](#-installation--usage)
 - [Configuration](#️-configuration)
 - [MCP Client Setup](#-mcp-client-setup)
+- [Deployment Modes](#-deployment-modes)
 - [Available Tools](#️-available-tools)
 - [Usage Examples](#-usage-examples)
 - [Troubleshooting](#-troubleshooting)
@@ -229,6 +230,40 @@ Add this to your Cline MCP settings:
 ### Other MCP Clients
 
 The server works with any MCP-compatible client. Use the same configuration pattern with your client's specific setup method.
+
+## 🚀 Deployment Modes
+
+The n8n-workflow-builder supports both traditional MCP stdio mode and HTTP mode for cloud deployments:
+
+### Stdio Mode (Default)
+Perfect for local AI assistants like Claude Desktop:
+```bash
+npm start
+# or
+npx @makafeli/n8n-workflow-builder
+```
+
+### HTTP Mode  
+For cloud deployments (Railway, Heroku, etc.):
+```bash
+# Explicitly enable HTTP mode
+USE_HTTP=true npm start
+
+# Or set PORT (automatically enables HTTP mode)
+PORT=1937 npm start
+```
+
+### Railway Deployment
+The server automatically detects Railway environment and starts in HTTP mode:
+- Health check endpoint: `/health`
+- MCP endpoint: `/mcp` 
+- Root endpoint: `/` (server info)
+
+Environment variables are automatically detected:
+- `PORT` - Server port (set by Railway)
+- `RAILWAY_ENVIRONMENT` - Triggers HTTP mode
+- `N8N_HOST` - Your n8n instance URL
+- `N8N_API_KEY` - Your n8n API key
 
 ## 🛠️ Available Tools
 
