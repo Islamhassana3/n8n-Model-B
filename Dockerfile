@@ -7,14 +7,22 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
+# Install all dependencies (including dev dependencies for building)
 # Set npm to ignore certificate issues that might occur in some environments
 RUN npm config set strict-ssl false && \
-    npm ci --omit=dev --verbose && \
+    npm ci --verbose && \
     npm config set strict-ssl true
 
-# Copy built application (make sure to build locally before Docker build)
-COPY build/ ./build/
+# Copy source code
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+COPY tsconfig.json ./
+
+# Build the application
+RUN npm run build
+
+# Remove dev dependencies to reduce image size
+RUN npm prune --omit=dev
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
