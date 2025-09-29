@@ -3,14 +3,27 @@
 ## The Problem (Solved!)
 
 The original issue was:
-> "its still not working, I have a feeling that the sql isnt set up right as in the other version it has like n8n with a arrow to mysql. (on railway.app)"
+> "the issue where only the n8n service and not the n8n service and the postgrees service with the n8n service flowing into the postgres encased togeteher"
 
-**The user expected a complete n8n setup with database, not just the workflow builder client.**
+**The user expected a complete n8n setup with PostgreSQL database properly connected to n8n, not just the workflow builder client.**
 
 ## The Solution ✅
 
-This repository now provides a **complete N8N automation stack** for Railway deployment:
+This repository now provides a **complete N8N automation stack** for Railway deployment with proper database connectivity:
 
+**PostgreSQL Stack (Recommended):**
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ PostgreSQL DB   │◄───┤   N8N Server    │◄───┤ Workflow Builder│
+│   Port: 5432    │    │   Port: 5678    │    │   Port: 1937    │
+│                 │    │                 │    │                 │
+│ • Workflow data │    │ • Web UI        │    │ • MCP Server    │
+│ • User accounts │    │ • API endpoints │    │ • AI Integration│
+│ • Executions    │    │ • Automations   │    │ • Claude/ChatGPT│
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+**MySQL Stack (Legacy):**
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   MySQL DB      │◄───┤   N8N Server    │◄───┤ Workflow Builder│
@@ -24,19 +37,25 @@ This repository now provides a **complete N8N automation stack** for Railway dep
 
 ## 🎯 What You Get
 
-1. **MySQL Database** - Stores all your workflows, user data, and execution history
+1. **Database** - Stores all your workflows, user data, and execution history
+   - **PostgreSQL** (Recommended): Modern, powerful, feature-rich
+   - **MySQL** (Legacy): Stable, widely supported
 2. **N8N Server** - The full n8n application with web interface
 3. **Workflow Builder** - MCP server for AI assistant integration
 
 ## 🚀 One-Click Deploy
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Islamhassana3/n8n-workflow-builder)
+**PostgreSQL Version (Recommended):**
+[![Deploy PostgreSQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Islamhassana3/n8n-workflow-builder/blob/main/railway-template-postgres.toml)
+
+**MySQL Version (Legacy):**
+[![Deploy MySQL Stack](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Islamhassana3/n8n-workflow-builder/blob/main/railway-template.toml)
 
 **Or manually:**
 
 1. Fork this repo
 2. Connect to Railway
-3. Deploy all 3 services
+3. Deploy all 3 services using the template files
 4. Configure environment variables
 
 ## 📋 Post-Deployment Setup
