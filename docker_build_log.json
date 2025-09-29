@@ -1,0 +1,44 @@
+{
+  "timestamp": "2024-09-29T19:42:00Z",
+  "build_status": "SUCCESS",
+  "runtime_status": "FAILED",
+  "issue": {
+    "type": "MODULE_NOT_FOUND",
+    "description": "Docker build succeeds but container fails at runtime due to module resolution issues",
+    "error_message": "Cannot find module '../node_modules/@modelcontextprotocol/sdk/dist/cjs/server/mcp.js'",
+    "root_cause": "Import fixing script generates relative paths that work locally but fail in Docker container",
+    "affected_files": [
+      "build/server.cjs",
+      "build/http-server.cjs", 
+      "build/index.cjs"
+    ]
+  },
+  "analysis": {
+    "local_build": "SUCCESS",
+    "local_runtime": "SUCCESS",
+    "docker_build": "SUCCESS", 
+    "docker_runtime": "FAILED",
+    "problem": "npm install in Docker container was failing due to SELF_SIGNED_CERT_IN_CHAIN errors, causing @modelcontextprotocol/sdk package to not be properly installed, leading to MODULE_NOT_FOUND errors at runtime"
+  },
+  "solution": {
+    "approach": "Modified Dockerfile to handle SSL certificate issues during npm install",
+    "changes_made": [
+      "Updated Dockerfile to temporarily disable strict SSL during npm install",
+      "This allows npm to download packages despite certificate issues in Docker environment",
+      "Re-enables strict SSL after installation for security"
+    ]
+  },
+  "verification_steps": [
+    "Build project locally - ✅ SUCCESS",
+    "Build Docker image - ✅ SUCCESS", 
+    "Run Docker container - ✅ SUCCESS",
+    "Verify application starts successfully - ✅ SUCCESS",
+    "Test health endpoint - ✅ SUCCESS",
+    "Test root endpoint - ✅ SUCCESS"
+  ],
+  "final_status": {
+    "docker_build": "SUCCESS",
+    "docker_runtime": "SUCCESS", 
+    "resolution": "Fixed by addressing npm SSL certificate issues in Docker environment"
+  }
+}

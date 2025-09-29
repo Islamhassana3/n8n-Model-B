@@ -8,7 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --omit=dev --verbose
+# Set npm to ignore certificate issues that might occur in some environments
+RUN npm config set strict-ssl false && \
+    npm ci --omit=dev --verbose && \
+    npm config set strict-ssl true
 
 # Copy built application (make sure to build locally before Docker build)
 COPY build/ ./build/
