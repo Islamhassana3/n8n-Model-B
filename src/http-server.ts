@@ -949,8 +949,8 @@ app.delete('/mcp', async (req, res) => {
   }
 });
 
-// Start the server
-const server = app.listen(PORT, () => {
+// Start the server - bind to 0.0.0.0 for Railway deployment
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`N8N Workflow Builder HTTP Server v0.10.3 running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
   console.log(`MCP endpoint: http://localhost:${PORT}/mcp`);
