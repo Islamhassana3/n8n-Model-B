@@ -32,12 +32,12 @@ RUN addgroup -g 1001 -S nodejs && \
 RUN chown -R nextjs:nodejs /app
 USER nextjs
 
-# Expose port
+# Expose port (Railway will set PORT environment variable, default to 1937)
 EXPOSE 1937
 
-# Health check
+# Health check (use PORT environment variable set by Railway, fallback to 1937)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:1937/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-1937}/health || exit 1
 
 # Start command
 CMD ["node", "build/main.cjs"]
