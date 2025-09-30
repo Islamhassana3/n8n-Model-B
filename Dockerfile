@@ -17,6 +17,9 @@ RUN npm config set strict-ssl false && \
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 COPY tsconfig.json ./
+# Copy optional Copilot panel and docs (non-fatal if missing)
+COPY copilot-panel.html ./
+COPY RAILWAY_COPILOT_DEPLOY.md ./
 
 # Build the application
 RUN npm run build
