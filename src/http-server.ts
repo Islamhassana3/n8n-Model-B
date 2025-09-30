@@ -972,6 +972,24 @@ app.use(cors());
 // Parse JSON requests
 app.use(express.json({ limit: '10mb' }));
 
+// Basic request logger (helps diagnose Railway 502 / timeout issues)
+app.use((req, _res, next) => {
+  try {
+    const started = Date.now();
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.socket.remoteAddress;
+    console.log(`[REQ] ${req.method} ${req.url} ip=${ip}`);
+    // Attach simple timing hook
+    const end = (res: any) => {
+      const ms = Date.now() - started;
+      console.log(`[RES] ${req.method} ${req.url} status=${res.statusCode} time=${ms}ms`);
+    };
+    _res.on('finish', () => end(_res));
+  } catch (e) {
+    console.warn('Request logger error:', e);
+  }
+  next();
+});
+
 // Health check endpoint for Railway
 app.get('/health', (req, res) => {
   res.json({ 
@@ -1017,6 +1035,18 @@ if (COPILOT_ENABLED) {
     console.warn('Copilot panel enabled but copilot-panel.html not found');
   }
 }
+
+// Fallback for unmatched routes (prevents generic platform error pages)
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    path: req.url,
+    service: 'n8n-workflow-builder',
+    copilotEnabled: COPILOT_ENABLED,
+    hint: COPILOT_ENABLED ? 'Check /copilot-panel or /health' : 'Enable COPILOT_ENABLED=true and set OPENAI_API_KEY to use AI panel',
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Store active transports
 const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
