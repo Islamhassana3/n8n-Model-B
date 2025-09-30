@@ -7,17 +7,24 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from "zod";
 import axios from "axios";
+import path from 'path';
+import fs from 'fs';
 
 // Configuration
 const N8N_HOST = process.env.N8N_HOST || 'http://localhost:5678';
 const N8N_API_KEY = process.env.N8N_API_KEY || '';
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 1937;
+// Optional AI/Copilot integration
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
+const COPILOT_ENABLED = process.env.COPILOT_ENABLED === 'true' || !!OPENAI_API_KEY;
 
 console.error("N8N Workflow Builder HTTP Server");
 console.error("N8N API Configuration:");
 console.error("Host:", N8N_HOST);
 console.error("API Key:", N8N_API_KEY ? `${N8N_API_KEY.substring(0, 4)}****` : 'Not set');
 console.error("Port:", PORT);
+console.error("Copilot Enabled:", COPILOT_ENABLED);
+console.error("OpenAI Key Present:", OPENAI_API_KEY ? 'yes' : 'no');
 
 // Create axios instance for n8n API
 const n8nApi = axios.create({
@@ -27,6 +34,17 @@ const n8nApi = axios.create({
     'Content-Type': 'application/json'
   }
 });
+
+// OpenAI client (only if enabled)
+const openaiApi = OPENAI_API_KEY
+  ? axios.create({
+      baseURL: 'https://api.openai.com/v1',
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    })
+  : null;
 
 // Factory function to create a new server instance
 const createServer = () => {
@@ -803,6 +821,145 @@ const createServer = () => {
     }
   );
 
+  // === Optional AI / Copilot Tools ===
+  if (COPILOT_ENABLED) {
+    // AI workflow generation
+    server.tool(
+      "generate_workflow_with_ai",
+      "Generate an n8n workflow JSON using natural language description",
+      {
+        description: z.string().describe("Natural language description of the workflow to create"),
+        complexity: z.enum(["simple", "moderate", "complex"]).optional().describe("Desired complexity level"),
+        includeErrorHandling: z.boolean().optional().describe("Include error handling nodes")
+      },
+      async ({ description, complexity = 'moderate', includeErrorHandling = true }) => {
+        try {
+          if (!openaiApi) throw new Error('OpenAI not configured');
+          const prompt = `Generate an n8n workflow configuration (JSON only) based on this description: "${description}"\nComplexity: ${complexity}\nInclude error handling: ${includeErrorHandling}. Return ONLY valid JSON for a workflow object.`;
+          const aiResponse = await openaiApi.post('/chat/completions', {
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: 'You are an expert n8n architect. Return only valid JSON for workflows.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.6,
+            max_tokens: 1500
+          });
+          const content = aiResponse.data.choices?.[0]?.message?.content || '';
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, workflow: content, metadata: { complexity, includeErrorHandling, generatedAt: new Date().toISOString() } }, null, 2) }] };
+        } catch (error) {
+          return { content: [{ type: 'text', text: `Error: ${error instanceof Error ? error.message : String(error)}` }], isError: true };
+        }
+      }
+    );
+
+    // AI optimization
+    server.tool(
+      "optimize_workflow_with_ai",
+      "Analyze and suggest optimizations for an existing workflow",
+      {
+        workflowId: z.string().describe("Workflow ID"),
+        optimizationGoals: z.array(z.enum(["performance", "reliability", "maintainability", "cost"]))
+          .describe("Optimization goals")
+      },
+      async ({ workflowId, optimizationGoals }) => {
+        try {
+          if (!openaiApi) throw new Error('OpenAI not configured');
+          const wf = await n8nApi.get(`/workflows/${workflowId}`);
+            const prompt = `Analyze this n8n workflow and provide structured optimization recommendations.\nGoals: ${optimizationGoals.join(', ')}\nWorkflow JSON:\n${JSON.stringify(wf.data, null, 2)}\nRespond with a concise markdown report.`;
+          const aiResponse = await openaiApi.post('/chat/completions', {
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: 'You are an expert at optimizing n8n workflows.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.35,
+            max_tokens: 1100
+          });
+          const suggestions = aiResponse.data.choices?.[0]?.message?.content || '';
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, workflowId, optimizationGoals, suggestions, analyzedAt: new Date().toISOString() }, null, 2) }] };
+        } catch (error) {
+          return { content: [{ type: 'text', text: `Error: ${error instanceof Error ? error.message : String(error)}` }], isError: true };
+        }
+      }
+    );
+
+    // AI documentation
+    server.tool(
+      "generate_workflow_documentation",
+      "Generate documentation for a workflow",
+      {
+        workflowId: z.string().describe("Workflow ID"),
+        includeUseCases: z.boolean().optional(),
+        includeTroubleshooting: z.boolean().optional()
+      },
+      async ({ workflowId, includeUseCases = true, includeTroubleshooting = true }) => {
+        try {
+          if (!openaiApi) throw new Error('OpenAI not configured');
+          const wf = await n8nApi.get(`/workflows/${workflowId}`);
+          const prompt = `Create clear documentation for this n8n workflow.\nInclude sections: Overview, Trigger(s), Steps, Data Flow, Node Roles, Configuration, ${includeUseCases ? 'Use Cases,' : ''} ${includeTroubleshooting ? 'Troubleshooting,' : ''} Best Practices.\nWorkflow JSON:\n${JSON.stringify(wf.data, null, 2)}`;
+          const aiResponse = await openaiApi.post('/chat/completions', {
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: 'You write concise, structured technical documentation.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.25,
+            max_tokens: 1700
+          });
+          const documentation = aiResponse.data.choices?.[0]?.message?.content || '';
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, workflowId, documentation, includes: { useCases: includeUseCases, troubleshooting: includeTroubleshooting }, generatedAt: new Date().toISOString() }, null, 2) }] };
+        } catch (error) {
+          return { content: [{ type: 'text', text: `Error: ${error instanceof Error ? error.message : String(error)}` }], isError: true };
+        }
+      }
+    );
+
+    // Copilot chat
+    server.tool(
+      "copilot_chat",
+      "Chat with AI Copilot for workflow help",
+      {
+        message: z.string().describe("Question or request"),
+        context: z.object({
+          currentWorkflow: z.string().optional(),
+          lastAction: z.string().optional(),
+          errorMessage: z.string().optional()
+        }).optional()
+      },
+      async ({ message, context }) => {
+        try {
+          if (!openaiApi) throw new Error('OpenAI not configured');
+          let contextInfo = '';
+          if (context?.currentWorkflow) {
+            try {
+              const wf = await n8nApi.get(`/workflows/${context.currentWorkflow}`);
+              contextInfo += `Workflow: ${wf.data.name} (${context.currentWorkflow})\n`;
+            } catch {
+              contextInfo += `Workflow ID: ${context.currentWorkflow}\n`;
+            }
+          }
+          if (context?.lastAction) contextInfo += `Last Action: ${context.lastAction}\n`;
+            if (context?.errorMessage) contextInfo += `Error: ${context.errorMessage}\n`;
+          const prompt = `${contextInfo}\nUser: ${message}`.trim();
+          const aiResponse = await openaiApi.post('/chat/completions', {
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: 'You are an assistant helping build and debug n8n workflows. Be specific and practical.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.65,
+            max_tokens: 700
+          });
+          const reply = aiResponse.data.choices?.[0]?.message?.content || '';
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, response: reply, context: context || {}, timestamp: new Date().toISOString() }, null, 2) }] };
+        } catch (error) {
+          return { content: [{ type: 'text', text: `Error: ${error instanceof Error ? error.message : String(error)}` }], isError: true };
+        }
+      }
+    );
+  }
+
   return server;
 };
 
@@ -822,6 +979,8 @@ app.get('/health', (req, res) => {
     service: 'n8n-workflow-builder',
     version: '0.10.3',
     n8nHost: N8N_HOST,
+    copilotEnabled: COPILOT_ENABLED,
+    aiEnabled: !!OPENAI_API_KEY,
     timestamp: new Date().toISOString()
   });
 });
@@ -834,12 +993,30 @@ app.get('/', (req, res) => {
     description: 'HTTP-enabled MCP server for n8n workflow management',
     endpoints: {
       health: '/health',
-      mcp: '/mcp'
+      mcp: '/mcp',
+      copilotPanel: COPILOT_ENABLED ? '/copilot-panel' : undefined
+    },
+    features: {
+      workflowManagement: true,
+      copilot: COPILOT_ENABLED,
+      aiGeneration: COPILOT_ENABLED && !!OPENAI_API_KEY
     },
     transport: 'HTTP (Streamable)',
     n8nHost: N8N_HOST
   });
 });
+
+// Serve Copilot panel HTML if enabled
+if (COPILOT_ENABLED) {
+  const panelPath = path.resolve(process.cwd(), 'copilot-panel.html');
+  if (fs.existsSync(panelPath)) {
+    app.get('/copilot-panel', (_req, res) => {
+      res.sendFile(panelPath);
+    });
+  } else {
+    console.warn('Copilot panel enabled but copilot-panel.html not found');
+  }
+}
 
 // Store active transports
 const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
