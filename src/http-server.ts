@@ -34,13 +34,13 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT) : 1937;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 const COPILOT_ENABLED = process.env.COPILOT_ENABLED === 'true' || !!OPENAI_API_KEY;
 
-console.error("N8N Workflow Builder HTTP Server");
-console.error("N8N API Configuration:");
-console.error("Host:", N8N_HOST);
-console.error("API Key:", N8N_API_KEY ? `${N8N_API_KEY.substring(0, 4)}****` : 'Not set');
-console.error("Port:", PORT);
-console.error("Copilot Enabled:", COPILOT_ENABLED);
-console.error("OpenAI Key Present:", OPENAI_API_KEY ? 'yes' : 'no');
+console.log("N8N Workflow Builder HTTP Server");
+console.log("N8N API Configuration:");
+console.log("Host:", N8N_HOST);
+console.log("API Key:", N8N_API_KEY ? `${N8N_API_KEY.substring(0, 4)}****` : 'Not set');
+console.log("Port:", PORT);
+console.log("Copilot Enabled:", COPILOT_ENABLED);
+console.log("OpenAI Key Present:", OPENAI_API_KEY ? 'yes' : 'no');
 
 // Create axios instance for n8n API
 const n8nApi = axios.create({
