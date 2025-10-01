@@ -1,8 +1,8 @@
 [build]
-builder = "nixpacks"
+builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "node build/main.cjs"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
