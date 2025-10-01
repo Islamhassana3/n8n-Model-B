@@ -93,13 +93,13 @@ A powerful Model Context Protocol (MCP) server that enables AI assistants to man
 
 > **Note:** This repository has been simplified to align with the standard Railway n8n deployment pattern. Advanced features like GitHub Copilot integration have been moved to `.deprecated/` for potential reintroduction in future versions. The focus is now on providing a clean, simple deployment that matches https://railway.com/deploy/n8n.
 
-> **✅ Railway Deployment Fixed!** All deployment issues have been resolved. The application now:
-> - ✅ Correctly builds on Railway with nixpacks.toml
-> - ✅ Automatically normalizes N8N_HOST URLs (adds https:// prefix)
-> - ✅ Properly configures health checks and startup
-> - ✅ Includes comprehensive deployment guides
+> **✅ Railway 502 Errors Fixed! (October 1, 2025)** Critical bug resolved where 404 handler was catching all MCP requests:
+> - ✅ **Fixed route ordering** - 404 handler moved to end of middleware chain
+> - ✅ **MCP endpoints now work** - No more 404 errors on /mcp requests
+> - ✅ **All 84 tests pass** - Including 6 new tests for route ordering
+> - ✅ **Ready for deployment** - Build, health checks, and endpoints all working
 > 
-> See [DEPLOYMENT_FIX_SUMMARY.md](./DEPLOYMENT_FIX_SUMMARY.md) for details.
+> See [RAILWAY_502_FIX.md](./RAILWAY_502_FIX.md) for technical details or [DEPLOYMENT_FIX_SUMMARY.md](./DEPLOYMENT_FIX_SUMMARY.md) for all fixes.
 
 ## 🎯 What is this?
 
@@ -287,13 +287,14 @@ For a complete n8n automation environment, deploy the full stack including n8n s
 
 🔧 **[Environment Variables Template](./RAILWAY_ENV_TEMPLATE.md)** - Exact variables needed
 
-⚠️ **[Railway PORT Fix](./RAILWAY_PORT_FIX.md)** - **IMPORTANT:** If you're experiencing "Application failed to respond" errors, see this guide
+⚠️ **[Railway 502 Fix](./RAILWAY_502_FIX.md)** - **FIXED:** Route ordering bug causing 502 errors has been resolved (October 1, 2025)
 
 **Quick Setup:**
 1. Click the deploy button above
 2. Set your admin credentials
 3. Generate N8N API key after deployment
-4. Use with Claude Desktop or other MCP clients
+4. **Verify deployment**: `bash scripts/verify-deployment.sh https://your-service.railway.app`
+5. Use with Claude Desktop or other MCP clients
 
 **⚠️ Important:** Do NOT manually set the PORT environment variable on Railway - Railway manages it automatically.
 
