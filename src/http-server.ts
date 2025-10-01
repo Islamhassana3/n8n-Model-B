@@ -1052,18 +1052,6 @@ if (COPILOT_ENABLED) {
   }
 }
 
-// Fallback for unmatched routes (prevents generic platform error pages)
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Not Found',
-    path: req.url,
-    service: 'n8n-workflow-builder',
-    copilotEnabled: COPILOT_ENABLED,
-    hint: COPILOT_ENABLED ? 'Check /copilot-panel or /health' : 'Enable COPILOT_ENABLED=true and set OPENAI_API_KEY to use AI panel',
-    timestamp: new Date().toISOString()
-  });
-});
-
 // Store active transports
 const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
 
@@ -1170,6 +1158,19 @@ app.delete('/mcp', async (req, res) => {
       res.status(500).send('Error processing session termination');
     }
   }
+});
+
+// Fallback for unmatched routes (prevents generic platform error pages)
+// IMPORTANT: This must be the LAST route handler registered
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    path: req.url,
+    service: 'n8n-workflow-builder',
+    copilotEnabled: COPILOT_ENABLED,
+    hint: COPILOT_ENABLED ? 'Check /copilot-panel or /health' : 'Enable COPILOT_ENABLED=true and set OPENAI_API_KEY to use AI panel',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Start the server - bind to 0.0.0.0 for Railway deployment
