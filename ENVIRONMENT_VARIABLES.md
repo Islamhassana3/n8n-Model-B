@@ -79,14 +79,16 @@ USE_HTTP=true
 N8N_HOST=${{n8n.RAILWAY_PUBLIC_DOMAIN}}
 N8N_API_KEY=your_api_key_from_n8n_ui
 
-# Port (automatically set by Railway)
-PORT=1937
+# Port - DO NOT SET THIS ON RAILWAY
+# Railway automatically assigns and manages the PORT variable
+# Only set PORT for local development (defaults to 1937)
 ```
 
 ## Notes
 
 1. **Railway Variables**: Variables like `${{postgres.RAILWAY_PRIVATE_DOMAIN}}` or `${{mysql.RAILWAY_PRIVATE_DOMAIN}}` are automatically populated by Railway
-2. **API Key**: Must be generated in N8N UI after deployment
-3. **Passwords**: Should be secure and unique for production
-4. **Dependencies**: Services must be deployed in order: Database (PostgreSQL/MySQL) → N8N → Workflow Builder
-5. **Database Choice**: PostgreSQL is recommended for better performance and features, but MySQL is also supported for compatibility
+2. **PORT Variable**: **DO NOT SET PORT on Railway** - Railway automatically assigns a port and sets the PORT environment variable. Only set PORT for local development.
+3. **API Key**: Must be generated in N8N UI after deployment
+4. **Passwords**: Should be secure and unique for production
+5. **Dependencies**: Services must be deployed in order: Database (PostgreSQL/MySQL) → N8N → Workflow Builder
+6. **Database Choice**: PostgreSQL is recommended for better performance and features, but MySQL is also supported for compatibility

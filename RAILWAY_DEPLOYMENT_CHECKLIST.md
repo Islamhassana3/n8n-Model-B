@@ -96,18 +96,20 @@ GENERIC_TIMEZONE=UTC
 
 ```
 USE_HTTP=true
-PORT=1937
 N8N_HOST=${{n8n.RAILWAY_PUBLIC_DOMAIN}}
 N8N_API_KEY=<paste-your-api-key>
 ```
 
-**Important:** Make sure to prefix the N8N_HOST with `https://` if it's not automatically added.
+**Important Notes:**
+- Make sure to prefix the N8N_HOST with `https://` if it's not automatically added.
+- **DO NOT** set the PORT variable - Railway sets this automatically.
+- Railway will assign a port dynamically and route traffic to your application correctly.
 
 5. [ ] Configure service settings:
    - Build Command: Automatically detected by nixpacks.toml
    - Start Command: `node build/main.cjs` (should be automatic)
    - Health Check Path: `/health`
-   - Port: `1937`
+   - Port: Automatically assigned by Railway (do not configure manually)
 
 6. [ ] Deploy the service
 7. [ ] Wait for deployment to complete

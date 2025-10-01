@@ -287,11 +287,15 @@ For a complete n8n automation environment, deploy the full stack including n8n s
 
 🔧 **[Environment Variables Template](./RAILWAY_ENV_TEMPLATE.md)** - Exact variables needed
 
+⚠️ **[Railway PORT Fix](./RAILWAY_PORT_FIX.md)** - **IMPORTANT:** If you're experiencing "Application failed to respond" errors, see this guide
+
 **Quick Setup:**
 1. Click the deploy button above
 2. Set your admin credentials
 3. Generate N8N API key after deployment
 4. Use with Claude Desktop or other MCP clients
+
+**⚠️ Important:** Do NOT manually set the PORT environment variable on Railway - Railway manages it automatically.
 
 **Single Service Deployment:**
 If you already have n8n running elsewhere, deploy just the workflow builder:
