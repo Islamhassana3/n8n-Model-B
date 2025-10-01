@@ -57,8 +57,8 @@ Create a workflow-builder service from this GitHub repository and set these vari
 # Server Mode
 USE_HTTP=true
 
-# Port (Railway sets this automatically, but you can specify it)
-PORT=1937
+# Port - DO NOT SET THIS - Railway manages the PORT automatically
+# The application will use Railway's assigned port automatically
 
 # N8N Connection
 N8N_HOST=${{n8n.RAILWAY_PUBLIC_DOMAIN}}
@@ -73,6 +73,7 @@ N8N_API_KEY=your_n8n_api_key_here
 - Replace `your_n8n_api_key_here` with the API key you generated in N8N UI
 - The `${{n8n.RAILWAY_PUBLIC_DOMAIN}}` is a Railway variable that references your N8N service
 - Make sure to prefix with `https://` if not automatically added
+- **DO NOT SET PORT** - Railway automatically assigns and manages the PORT variable
 
 **To get the N8N API key:**
 1. Deploy N8N service first
