@@ -4,11 +4,11 @@
 const useHttp = process.env.USE_HTTP === 'true' || process.env.PORT || process.env.RAILWAY_ENVIRONMENT;
 
 if (useHttp) {
-  console.error("Starting N8N Workflow Builder in HTTP mode...");
+  console.log("Starting N8N Workflow Builder in HTTP mode...");
   // Import and run the HTTP server
   require('./http-server.cjs');
 } else {
-  console.error("Starting N8N Workflow Builder in stdio mode...");
+  console.log("Starting N8N Workflow Builder in stdio mode...");
   // Import and run the stdio server  
   require('./server.cjs');
 }

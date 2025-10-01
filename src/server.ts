@@ -25,9 +25,9 @@ const normalizeN8nHost = (host: string): string => {
 const N8N_HOST = normalizeN8nHost(process.env.N8N_HOST || 'http://localhost:5678');
 const N8N_API_KEY = process.env.N8N_API_KEY || '';
 
-console.error("N8N API Configuration:");
-console.error("Host:", N8N_HOST);
-console.error("API Key:", N8N_API_KEY ? `${N8N_API_KEY.substring(0, 4)}****` : 'Not set');
+console.log("N8N API Configuration:");
+console.log("Host:", N8N_HOST);
+console.log("API Key:", N8N_API_KEY ? `${N8N_API_KEY.substring(0, 4)}****` : 'Not set');
 
 // Create axios instance for n8n API
 const n8nApi = axios.create({
