@@ -21,10 +21,18 @@ Application failed to respond
    - Railway provides domains without protocol prefix
    - Connection to N8N was failing due to missing https://
 
-3. **Documentation Gaps**
+3. **PORT Configuration Conflict (Critical Fix - Dec 2024)**
+   - Documentation instructed users to set PORT=1937 manually
+   - Railway automatically assigns PORT variable for routing
+   - Manual PORT setting overrides Railway's automatic assignment
+   - Causes "Application failed to respond" error because Railway expects app on its assigned port
+   - Health checks fail because Railway checks the assigned port, not 1937
+
+4. **Documentation Gaps**
    - No step-by-step deployment checklist
    - Environment variables not clearly documented
    - Troubleshooting steps were scattered across multiple files
+   - Contradictory information about PORT variable
 
 ## Changes Made
 
@@ -211,19 +219,24 @@ See [RAILWAY_DEPLOYMENT_CHECKLIST.md](./RAILWAY_DEPLOYMENT_CHECKLIST.md) for det
 
 ## Common Issues Fixed
 
-### Issue 1: "Application failed to respond"
+### Issue 1: "Application failed to respond" (PORT Configuration)
+**Cause:** Documentation instructed users to manually set PORT=1937, which overrides Railway's automatic PORT assignment. Railway assigns a dynamic port and expects the application to bind to that port for routing and health checks.
+**Fix:** Removed PORT=1937 from all deployment documentation and Railway templates. Railway now automatically manages the PORT variable, while the application code correctly defaults to 1937 for local development.
+**Impact:** This is the most common deployment failure. The application must use Railway's assigned PORT for proper routing.
+
+### Issue 2: Missing nixpacks.toml configuration
 **Cause:** Missing nixpacks.toml configuration
 **Fix:** Added nixpacks.toml with explicit build phases
 
-### Issue 2: Can't connect to N8N
+### Issue 3: Can't connect to N8N
 **Cause:** N8N_HOST missing https:// prefix
 **Fix:** Added URL normalization function
 
-### Issue 3: Build fails on Railway
+### Issue 4: Build fails on Railway
 **Cause:** Incorrect builder configuration in railway.toml
 **Fix:** Changed to `builder = "NIXPACKS"` (uppercase)
 
-### Issue 4: Health check timeout
+### Issue 5: Health check timeout
 **Cause:** Health check configuration issues
 **Fix:** Set explicit healthcheckPath and timeout in railway.toml
 
@@ -233,10 +246,11 @@ After deploying, verify:
 
 - [ ] Workflow-builder service shows "Active" status
 - [ ] Health endpoint returns 200 status
-- [ ] Logs show: "N8N Workflow Builder HTTP Server v0.10.3 running on port 1937"
+- [ ] Logs show: "N8N Workflow Builder HTTP Server v0.10.3 running on port [Railway-assigned-port]"
 - [ ] N8N_HOST is normalized with https:// prefix
 - [ ] Can access workflow-builder public URL
 - [ ] Root endpoint shows server information
+- [ ] **DO NOT** see PORT=1937 in Railway environment variables (Railway manages PORT automatically)
 
 ## Files Modified
 
@@ -246,20 +260,25 @@ After deploying, verify:
 4. `.dockerignore` - Updated file exclusions
 5. `src/http-server.ts` - Added URL normalization
 6. `src/server.ts` - Added URL normalization
-7. `RAILWAY_DEPLOYMENT_CHECKLIST.md` - NEW: Step-by-step guide
-8. `RAILWAY_ENV_TEMPLATE.md` - NEW: Environment variables
-9. `DEPLOYMENT_FIX_SUMMARY.md` - NEW: This file
+7. `RAILWAY_DEPLOYMENT_CHECKLIST.md` - NEW: Step-by-step guide; **UPDATED (Dec 2024)**: Removed hardcoded PORT configuration
+8. `RAILWAY_ENV_TEMPLATE.md` - NEW: Environment variables; **UPDATED (Dec 2024)**: Clarified PORT behavior
+9. `ENVIRONMENT_VARIABLES.md` - **UPDATED (Dec 2024)**: Added PORT warning
+10. `railway-template.json` - **UPDATED (Dec 2024)**: Removed hardcoded PORT from workflow-builder service
+11. `railway-template-postgres.json` - **UPDATED (Dec 2024)**: Removed hardcoded PORT from workflow-builder service
+12. `DEPLOYMENT_FIX_SUMMARY.md` - NEW: This file; **UPDATED (Dec 2024)**: Added PORT configuration fix
 
 ## Next Steps
 
 1. **Deploy to Railway:**
    - Use the templates or manual deployment
    - Follow the checklist
+   - **DO NOT manually set the PORT variable** - let Railway manage it
 
 2. **Test the Deployment:**
    - Verify health endpoint
    - Test workflow operations
    - Check logs for errors
+   - Verify the application is running on Railway's assigned port
 
 3. **Monitor:**
    - Watch Railway metrics
