@@ -93,6 +93,14 @@ A powerful Model Context Protocol (MCP) server that enables AI assistants to man
 
 > **Note:** This repository has been simplified to align with the standard Railway n8n deployment pattern. Advanced features like GitHub Copilot integration have been moved to `.deprecated/` for potential reintroduction in future versions. The focus is now on providing a clean, simple deployment that matches https://railway.com/deploy/n8n.
 
+> **✅ Railway Deployment Fixed!** All deployment issues have been resolved. The application now:
+> - ✅ Correctly builds on Railway with nixpacks.toml
+> - ✅ Automatically normalizes N8N_HOST URLs (adds https:// prefix)
+> - ✅ Properly configures health checks and startup
+> - ✅ Includes comprehensive deployment guides
+> 
+> See [DEPLOYMENT_FIX_SUMMARY.md](./DEPLOYMENT_FIX_SUMMARY.md) for details.
+
 ## 🎯 What is this?
 
 The n8n Workflow Builder MCP Server bridges the gap between AI assistants (like Claude Desktop, Cline, or any MCP-compatible client) and your n8n automation platform. It provides a comprehensive set of tools that allow AI assistants to:
@@ -274,6 +282,10 @@ For a complete n8n automation environment, deploy the full stack including n8n s
 - ✅ **Auto-configuration** - Services connected and ready to use
 
 📖 **[Complete Railway Deployment Guide](./RAILWAY_DEPLOY.md)**
+
+📋 **[Railway Deployment Checklist](./RAILWAY_DEPLOYMENT_CHECKLIST.md)** - Step-by-step deployment instructions
+
+🔧 **[Environment Variables Template](./RAILWAY_ENV_TEMPLATE.md)** - Exact variables needed
 
 **Quick Setup:**
 1. Click the deploy button above
