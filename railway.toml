@@ -2,22 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm run build && node build/main.cjs"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-
-# Environment variables for Railway deployment
-[[deploy.environmentVariables]]
-name = "USE_HTTP"
-value = "true"
-
-[[deploy.environmentVariables]]
-name = "NODE_ENV"
-value = "production"
-
-# This defines the workflow-builder service only
-# For complete n8n stack deployment, use railway-template-postgres.json or railway-template.json
-[services.n8n-workflow-builder]
-source = "."

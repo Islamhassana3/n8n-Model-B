@@ -5,10 +5,13 @@
 nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm ci --legacy-peer-deps"]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [start]
-cmd = "node build/main.cjs"
+cmd = "USE_HTTP=true node build/main.cjs"
+
+[variables]
+NODE_ENV = "production"
