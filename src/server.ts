@@ -816,8 +816,8 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("N8N Workflow Builder MCP server v0.10.3 running on stdio");
-  console.error("Modern SDK 1.17.0 with 23 tools: 9 workflow + 3 execution + 7 tag + 3 credential + 1 audit");
+  console.log("N8N Workflow Builder MCP server v0.10.3 running on stdio");
+  console.log("Modern SDK 1.17.0 with 23 tools: 9 workflow + 3 execution + 7 tag + 3 credential + 1 audit");
 }
 
 main().catch((error) => {
