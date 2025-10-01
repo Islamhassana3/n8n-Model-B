@@ -91,6 +91,8 @@ A powerful Model Context Protocol (MCP) server that enables AI assistants to man
 - **[🔍 Comparison with Alternatives](COMPARISON.md)** - vs Zapier, Make.com, n8n Web UI, and CLI
 - **[🔧 Comprehensive Troubleshooting](TROUBLESHOOTING.md)** - Solutions for common issues and problems
 
+> **Note:** This repository has been simplified to align with the standard Railway n8n deployment pattern. Advanced features like GitHub Copilot integration have been moved to `.deprecated/` for potential reintroduction in future versions. The focus is now on providing a clean, simple deployment that matches https://railway.com/deploy/n8n.
+
 ## 🎯 What is this?
 
 The n8n Workflow Builder MCP Server bridges the gap between AI assistants (like Claude Desktop, Cline, or any MCP-compatible client) and your n8n automation platform. It provides a comprehensive set of tools that allow AI assistants to:

@@ -1,6 +1,8 @@
 # 🚀 Railway Deployment Guide for Complete N8N Stack
 
-This guide explains how to deploy a complete N8N automation stack on Railway, including the n8n server, MySQL database, and n8n-workflow-builder MCP server.
+This guide explains how to deploy a complete N8N automation stack on Railway, including the n8n server, database (MySQL or PostgreSQL), and n8n-workflow-builder MCP server.
+
+> **Note:** This deployment has been simplified to match the standard Railway n8n pattern at https://railway.com/deploy/n8n. Advanced features like GitHub Copilot integration have been removed to focus on a clean, stable deployment. These features may be reintroduced in future versions.
 
 ## 🏗️ Architecture
 
