@@ -6,7 +6,23 @@ import { z } from "zod";
 import axios from "axios";
 
 // Configuration
-const N8N_HOST = process.env.N8N_HOST || 'http://localhost:5678';
+const normalizeN8nHost = (host: string): string => {
+  if (!host) return 'http://localhost:5678';
+  
+  // Remove trailing slash
+  host = host.replace(/\/$/, '');
+  
+  // Add https:// if no protocol specified and not localhost
+  if (!host.startsWith('http://') && !host.startsWith('https://')) {
+    // Use https for production Railway deployments, http for localhost
+    const isLocalhost = host.includes('localhost') || host.includes('127.0.0.1');
+    host = isLocalhost ? `http://${host}` : `https://${host}`;
+  }
+  
+  return host;
+};
+
+const N8N_HOST = normalizeN8nHost(process.env.N8N_HOST || 'http://localhost:5678');
 const N8N_API_KEY = process.env.N8N_API_KEY || '';
 
 console.error("N8N API Configuration:");
