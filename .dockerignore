@@ -16,3 +16,4 @@ dist/
 .github/
 *.md
 .deprecated/
+build/
