@@ -301,6 +301,8 @@ USE_HTTP=true npm start
 PORT=1937 npm start
 ```
 
+**Note:** If the configured port is already in use, the server will automatically find and use the next available port. This is logged in the console output.
+
 ### Railway Deployment
 
 **🔥 Deploy Complete N8N Stack to Railway**

@@ -9,6 +9,7 @@ import { z } from "zod";
 import axios from "axios";
 import path from 'path';
 import fs from 'fs';
+import { findAvailablePort } from './utils/port-finder.js';
 
 // Configuration
 const normalizeN8nHost = (host: string): string => {
@@ -1174,12 +1175,27 @@ app.use((req, res) => {
 });
 
 // Start the server - bind to 0.0.0.0 for Railway deployment
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`N8N Workflow Builder HTTP Server v0.10.3 running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log(`MCP endpoint: http://localhost:${PORT}/mcp`);
-  console.log("Modern SDK 1.17.0 with HTTP transport and 23 tools available");
-});
+let server: any;
+
+async function startServer() {
+  try {
+    // Find an available port
+    const actualPort = await findAvailablePort(PORT, '0.0.0.0');
+    
+    server = app.listen(actualPort, '0.0.0.0', () => {
+      console.log(`N8N Workflow Builder HTTP Server v0.10.3 running on port ${actualPort}`);
+      console.log(`Health check: http://localhost:${actualPort}/health`);
+      console.log(`MCP endpoint: http://localhost:${actualPort}/mcp`);
+      console.log("Modern SDK 1.17.0 with HTTP transport and 23 tools available");
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
