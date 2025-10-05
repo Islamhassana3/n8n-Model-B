@@ -91,7 +91,7 @@ preview.bat
 ./preview.sh
 
 # Cross-platform (Node.js)
-node preview.js
+node preview.cjs
 ```
 
 **What happens:**

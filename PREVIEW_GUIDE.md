@@ -28,7 +28,7 @@ preview.bat
 
 #### Cross-Platform (Node.js)
 ```bash
-node preview.js
+node preview.cjs
 ```
 
 ### Method 2: Manual Launch
