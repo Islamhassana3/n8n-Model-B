@@ -22,6 +22,15 @@ function fixImportsInFile(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   let modified = false;
   
+  // Fix local .js imports to .cjs first (before SDK imports)
+  const localJsRegex = /require\("(\..+?)\.js"\)/g;
+  const matches = content.match(localJsRegex);
+  if (matches) {
+    content = content.replace(localJsRegex, 'require("$1.cjs")');
+    modified = true;
+  }
+  
+  // Fix @modelcontextprotocol/sdk imports (these should remain .js)
   for (const [oldPath, newPath] of Object.entries(importFixes)) {
     const regex = new RegExp(`require\\("${oldPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\)`, 'g');
     if (content.includes(`"${oldPath}"`)) {
