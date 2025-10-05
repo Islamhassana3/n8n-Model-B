@@ -67,6 +67,44 @@
 
 A powerful Model Context Protocol (MCP) server that enables AI assistants to manage n8n workflows seamlessly. Connect your AI tools directly to n8n for automated workflow creation, execution, and management.
 
+## 🚀 Quick Preview
+
+**Want to see it in action?** Launch the server instantly and test it in your browser!
+
+<div align="center">
+
+[![Preview on localhost:3000](https://img.shields.io/badge/🚀_Preview-localhost:3000-blue?style=for-the-badge&logo=rocket)](http://localhost:3000)
+&nbsp;&nbsp;
+[![Preview Guide](https://img.shields.io/badge/📖_Guide-Preview_Instructions-green?style=for-the-badge&logo=book)](./PREVIEW_GUIDE.md)
+
+</div>
+
+### Quick Launch Options
+
+Choose your platform and run:
+
+```bash
+# Windows
+preview.bat
+
+# Linux/Mac
+./preview.sh
+
+# Cross-platform (Node.js)
+node preview.cjs
+```
+
+**What happens:**
+- ✅ Auto-installs dependencies if needed
+- ✅ Builds the project automatically
+- ✅ Starts HTTP server on port 3000
+- ✅ Opens your browser automatically
+- ✅ Ready to test in seconds!
+
+📖 **[Full Preview Guide →](./PREVIEW_GUIDE.md)**
+
+---
+
 ## 📚 Table of Contents
 
 - [What is this?](#-what-is-this)
